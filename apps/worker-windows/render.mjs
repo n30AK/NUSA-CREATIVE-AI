@@ -83,7 +83,7 @@ function run() {
       throw new Error("Font Arial/Segoe UI tidak ditemukan. Atur NUSA_FONT_FILE ke file .ttf Windows.");
     }
     // An explicit font file bypasses Fontconfig's missing default config.
-    const ffmpegFontPath = fontFile.replace(/\\\\/g, "/").replace(/:/g, "\\\\:");
+    const ffmpegFontPath = fontFile.replace(/\\/g, "/").replace(/:/g, "\\:");
     drawTextFilters.push(
       `drawtext=fontfile='${ffmpegFontPath}':textfile='${relativePath}':expansion=none:fontcolor=white:fontsize=${fontSize}:line_spacing=12:borderw=3:bordercolor=black@0.65:box=1:boxcolor=${boxColor}:boxborderw=22:x=(w-text_w)/2:y=${y}`
     );
