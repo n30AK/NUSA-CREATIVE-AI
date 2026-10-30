@@ -65,6 +65,12 @@ function run() {
   const jobId = randomUUID();
   const tempFiles = [];
   const drawTextFilters = [];
+  const fontCandidates = [
+    process.env.NUSA_FONT_FILE,
+    path.join(process.env.WINDIR || "C:\\Windows", "Fonts", "arial.ttf"),
+    path.join(process.env.WINDIR || "C:\\Windows", "Fonts", "segoeui.ttf")
+  ].filter(Boolean);
+  const fontFile = fontCandidates.find((candidate) => existsSync(candidate) && statSync(candidate).isFile());
 
   function addTextLayer(name, value, y, fontSize, boxColor) {
     if (!value) return;
@@ -73,8 +79,13 @@ function run() {
     writeFileSync(absolutePath, value, { encoding: "utf8", flag: "wx" });
     tempFiles.push(absolutePath);
     const relativePath = path.relative(root, absolutePath).split(path.sep).join("/");
+    if (!fontFile) {
+      throw new Error("Font Arial/Segoe UI tidak ditemukan. Atur NUSA_FONT_FILE ke file .ttf Windows.");
+    }
+    // An explicit font file bypasses Fontconfig's missing default config.
+    const ffmpegFontPath = fontFile.replace(/\\\\/g, "/").replace(/:/g, "\\\\:");
     drawTextFilters.push(
-      `drawtext=font='Arial':textfile='${relativePath}':expansion=none:fontcolor=white:fontsize=${fontSize}:line_spacing=12:borderw=3:bordercolor=black@0.65:box=1:boxcolor=${boxColor}:boxborderw=22:x=(w-text_w)/2:y=${y}`
+      `drawtext=fontfile='${ffmpegFontPath}':textfile='${relativePath}':expansion=none:fontcolor=white:fontsize=${fontSize}:line_spacing=12:borderw=3:bordercolor=black@0.65:box=1:boxcolor=${boxColor}:boxborderw=22:x=(w-text_w)/2:y=${y}`
     );
   }
 
