@@ -1,0 +1,12 @@
+{
+  "name": "nusa-creative-ai",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": ["apps/web"],
+  "scripts": {
+    "dev": "npm run dev --workspace @nusa/web",
+    "build": "npm run build --workspace @nusa/web",
+    "typecheck": "npm run typecheck --workspace @nusa/web"
+  }
+}
