@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { spawnSync } from "node:child_process";
-import { mkdirSync, existsSync, statSync, writeFileSync, unlinkSync } from "node:fs";
+import { mkdirSync, existsSync, statSync, writeFileSync, unlinkSync, copyFileSync } from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import { randomUUID } from "node:crypto";
@@ -70,6 +70,13 @@ function run() {
   mkdirSync(cacheRoot, { recursive: true });
   const jobId = randomUUID();
   const tempFiles = [];
+  let subtitleFilterPath = null;
+  if (subtitles) {
+    const stagedSubtitle = path.join(cacheRoot, `nca-${jobId}-captions.srt`);
+    copyFileSync(subtitles, stagedSubtitle);
+    tempFiles.push(stagedSubtitle);
+    subtitleFilterPath = path.relative(root, stagedSubtitle).split(path.sep).join("/");
+  }
   const fontCandidates = [
     process.env.NUSA_FONT_FILE,
     path.join(process.env.WINDIR || "C:\\Windows", "Fonts", "arial.ttf"),
@@ -84,9 +91,12 @@ function run() {
   const sceneDuration = (duration + transition * (images.length - 1)) / images.length;
   const filters = [];
   for (let i = 0; i < images.length; i += 1) {
-    const frames = Math.ceil(sceneDuration * 30);
+    const motionFrames = Math.max(1, Math.ceil(sceneDuration * 30));
+    const horizontalPan = i % 2 === 0
+      ? `(iw-iw/zoom)*(0.35+0.3*on/${motionFrames})`
+      : `(iw-iw/zoom)*(0.65-0.3*on/${motionFrames})`;
     filters.push(
-      `[${i}:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,zoompan=z='min(zoom+0.00035,1.06)':d=1:s=1080x1920:fps=30,trim=duration=${sceneDuration.toFixed(3)},setpts=PTS-STARTPTS[v${i}]`
+      `[${i}:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1,zoompan=z='1+0.16*on/${motionFrames}':x='${horizontalPan}':y='ih/2-(ih/zoom/2)':d=1:s=1080x1920:fps=30,trim=duration=${sceneDuration.toFixed(3)},setpts=PTS-STARTPTS[v${i}]`
     );
   }
   let videoLabel = "v0";
@@ -114,7 +124,7 @@ function run() {
   let finalFilters = textLayers;
   if (subtitles) {
     finalFilters = [...finalFilters,
-      `subtitles=filename='${escapeFilterPath(subtitles)}':force_style='FontName=Arial,FontSize=20,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=1,Outline=2,Shadow=1,Alignment=2,MarginV=180'`
+      `subtitles=filename='${subtitleFilterPath}':force_style='FontName=Arial,FontSize=20,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=1,Outline=2,Shadow=1,Alignment=2,MarginV=180'`
     ];
   }
   if (finalFilters.length) {
