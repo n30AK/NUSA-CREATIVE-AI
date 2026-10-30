@@ -1,6 +1,6 @@
 # Windows local renderer (MVP)
 
-This local FFmpeg worker creates a vertical 1080×1920 H.264 MP4 from one to three product images. It supports a slow Ken Burns zoom, fade transitions between images, optional title/description/CTA overlays, optional background music, and optional SRT subtitles. It validates the output with ffprobe.
+This local FFmpeg worker creates a vertical 1080×1920 H.264 MP4 from one to three product images. It supports a more visible animated camera push/pan (Ken Burns), fade transitions between images, optional title/description/CTA overlays, optional background music, and optional SRT subtitles. It validates the output with ffprobe.
 
 ## Run on Windows
 
@@ -30,7 +30,7 @@ Optional text:
 - `--subtitle`: maximum 140 characters
 - `--cta`: maximum 48 characters
 
-Optional `--subtitles` accepts an existing SubRip `.srt` file and burns it into the video. Subtitle timing and wording must be prepared in that file; the worker does not transcribe audio or generate captions automatically.
+Optional `--subtitles` accepts an existing SubRip `.srt` file and burns it into the video. The worker stages a temporary copy inside its own cache directory and passes a relative path to FFmpeg to avoid Windows drive-letter parsing issues. Subtitle timing and wording must be prepared in that file; the worker does not transcribe audio or generate captions automatically.
 
 Text is written to unique temporary files under `cache/renderer` and removed after rendering. Windows Arial or Segoe UI is used through an explicit font file to avoid reliance on Fontconfig. If needed, set `NUSA_FONT_FILE` to a valid local `.ttf` path.
 
@@ -40,7 +40,7 @@ The script calls `ffprobe` after rendering and prints actual stream dimensions, 
 
 ## Current limits
 
-This is a local editing/compositing worker, not an AI image/video generator. It does not create product imagery, voice-over, music, or automatic transcription. It does not publish to marketplaces or social networks. AI generation and publishing integrations remain separate work.
+The camera movement animates the framing of still photos; it does not animate the product or create new moving objects. This is a local editing/compositing worker, not an AI image/video generator. It does not create product imagery, voice-over, music, or automatic transcription. It does not publish to marketplaces or social networks. AI generation and publishing integrations remain separate work.
 
 ## Storage safety
 
