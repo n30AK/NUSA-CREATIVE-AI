@@ -8,46 +8,23 @@ type Mode = "hemat" | "hybrid" | "premium";
 
 const imageProviders = [
   {
-    name: "AI Horde",
-    tag: "Komunitas open-source",
-    detail: "Gratis melalui GPU sukarelawan. Tanpa paket kredit; antrean anonim paling rendah dan kecepatan bergantung worker aktif.",
-    href: "https://api.stablehorde.net/generate/image/",
-    action: "Buka AI Horde Studio",
+    name: "GenFree",
+    tag: "Tanpa akun · tanpa kredit",
+    detail: "Terms menyatakan layanan gratis tanpa kredit atau pembayaran. Tetap ada verifikasi manusia dan fair-use/anti-abuse; bukan jaminan throughput tanpa batas.",
+    href: "https://genfree.app/",
+    action: "Buka GenFree",
     recommended: true,
   },
   {
     name: "FreeImgGen",
-    tag: "Tanpa akun",
-    detail: "Mengiklankan generasi tanpa batas harian dan tanpa kredit. Tetap menerapkan fair-use/rate limit saat ramai; file disimpan sementara.",
+    tag: "Tanpa akun · tanpa kredit",
+    detail: "Mengklaim tanpa batas harian dan tanpa kredit. Fair-use/rate-limit dapat berlaku saat ramai; hasil dihapus otomatis setelah 24 jam.",
     href: "https://freeimggen.com/",
     action: "Buka FreeImgGen",
   },
-  {
-    name: "GenFree",
-    tag: "Tanpa akun",
-    detail: "Mengiklankan tanpa kredit harian, tetapi memakai verifikasi manusia dan perlindungan terhadap permintaan berlebihan.",
-    href: "https://genfree.app/",
-    action: "Buka GenFree",
-  },
 ];
 
-const videoProviders = [
-  {
-    name: "LoreMotion",
-    tag: "Pilihan utama · Image-to-video",
-    detail: "LTX-Video gratis tanpa batas harian setelah akun gratis dibuat; 720p, 3/5/8 detik, antrean bersama dan iklan singkat per render. Bukan API untuk diotomasi.",
-    href: "https://loremotion.com/generate/",
-    action: "Buka LoreMotion",
-    recommended: true,
-  },
-  {
-    name: "Movoa",
-    tag: "Alternatif · MiniMax H3",
-    detail: "Free lane tanpa batas harian untuk H3 480p/4 detik dengan akun gratis; antrean bersama. Ketentuan melarang bot, skrip, dan otomasi.",
-    href: "https://movoa.ai/video",
-    action: "Buka Movoa",
-  },
-];
+const videoProviders: { name: string; tag: string; detail: string; href: string; action: string; recommended?: boolean }[] = [];
 
 export default function App() {
   const [mode, setMode] = useState<Mode>("hemat");
@@ -55,7 +32,7 @@ export default function App() {
   const [productName, setProductName] = useState("");
   const [duration, setDuration] = useState("45");
   const [platform, setPlatform] = useState("TikTok + Shopee Video");
-  const [notice, setNotice] = useState("Pilih provider gratis di bawah. NUSA tidak meminta kartu pembayaran atau mengaktifkan tagihan.");
+  const [notice, setNotice] = useState("Belum ada provider image-to-video yang lolos verifikasi syarat gratis tanpa kuota dan tanpa pembayaran.");
 
   function startBrief() {
     if (!productName.trim() && !productUrl.trim()) {
@@ -82,7 +59,7 @@ export default function App() {
       <section className="main">
         <header className="topbar" id="overview"><div><span className="eyebrow">AFFILIATE CONTENT WORKSPACE</span><h1>Creative command center</h1></div><div className="status"><i/> GRATIS-FIRST MODE</div></header>
         <section className="hero">
-          <div><span className="eyebrow light">NUSA CREATIVE AI</span><h2>From product photo<br/>to moving content.</h2><p>Gunakan generator gambar dan image-to-video yang benar-benar punya jalur gratis tanpa paket kredit harian.</p><button className="primary" onClick={() => document.getElementById("image-studio")?.scrollIntoView({behavior:"smooth"})}>Open free studios <ArrowUpRight size={16}/></button></div>
+          <div><span className="eyebrow light">NUSA CREATIVE AI</span><h2>From product photo<br/>to moving content.</h2><p>Text-to-image punya beberapa opsi tanpa kredit tetap. Untuk image-to-video, kami tidak akan mencantumkan layanan yang ternyata berbayar atau berbatasan kuota.</p><button className="primary" onClick={() => document.getElementById("image-studio")?.scrollIntoView({behavior:"smooth"})}>Open image studio <ArrowUpRight size={16}/></button></div>
           <div className="hero-art"><div className="orb orb-a"/><div className="orb orb-b"/><div className="phone"><div className="phone-top"/><div className="phone-image"><Clapperboard size={35}/></div><div className="phone-line"/><div className="phone-line short"/></div><div className="floating-tag">IMAGE → MOTION</div></div>
         </section>
 
@@ -106,7 +83,7 @@ export default function App() {
         </section>
 
         <section id="image-studio" className="provider-section">
-          <div className="section-head"><div><span className="eyebrow">TEXT TO IMAGE</span><h3>Free image studios</h3></div><span className="muted">Tanpa paket kredit harian</span></div>
+          <div className="section-head"><div><span className="eyebrow">TEXT TO IMAGE</span><h3>Image studios · free access</h3></div><span className="muted">Fair-use tetap berlaku</span></div>
           <div className="provider-grid">{imageProviders.map((p)=><article className="panel provider-card" key={p.name}>
             <div className="provider-top"><div className="icon-tile"><Image size={19}/></div>{p.recommended&&<span className="provider-badge">RECOMMENDED</span>}</div>
             <span className="eyebrow">{p.tag}</span><h4>{p.name}</h4><p>{p.detail}</p><a className="provider-link" href={p.href} target="_blank" rel="noreferrer">{p.action} <ExternalLink size={14}/></a>
@@ -115,20 +92,18 @@ export default function App() {
 
         <section id="video-studio" className="provider-section">
           <div className="section-head"><div><span className="eyebrow">IMAGE TO VIDEO</span><h3>Animate a real product image</h3></div><span className="muted">AI motion, bukan zoom FFmpeg</span></div>
-          <div className="provider-grid">{videoProviders.map((p)=><article className="panel provider-card" key={p.name}>
+          {videoProviders.length ? <div className="provider-grid">{videoProviders.map((p)=><article className="panel provider-card" key={p.name}>
             <div className="provider-top"><div className="icon-tile"><Video size={19}/></div>{p.recommended&&<span className="provider-badge">RECOMMENDED</span>}</div>
             <span className="eyebrow">{p.tag}</span><h4>{p.name}</h4><p>{p.detail}</p><a className="provider-link" href={p.href} target="_blank" rel="noreferrer">{p.action} <ExternalLink size={14}/></a>
-          </article>)}</div>
-          <div className="notice-panel"><b>Catatan durasi:</b> provider AI di atas membuat klip pendek 3–8 detik, bukan satu video 30–60 detik. Video panjang harus dirangkai dari beberapa klip AI dan materi produk. Ini gerakan objek/adegan hasil model, berbeda dari efek zoom pada gambar diam.</div>
+          </article>)}</div> : <div className="panel guardrail-panel"><h4>Belum ada provider yang memenuhi syarat ketat</h4><p>Saya belum menemukan layanan image-to-video cloud yang dapat diverifikasi benar-benar gratis, tanpa kredit/kuota, tanpa trial, dan tanpa pembayaran untuk penggunaan berulang. Karena itu saya tidak menampilkan tombol provider yang berpotensi menyesatkan.</p><p>Model open-source seperti Wan 2.2 dapat menghasilkan gerakan gambar sungguhan tanpa biaya per render jika dijalankan sendiri, tetapi membutuhkan GPU NVIDIA yang memadai. PC saat ini (Intel HD 4600, RAM 8 GB) tidak memenuhi kebutuhan praktisnya.</p><p>Opsi berikutnya adalah membangun jalur komputasi komunitas/volunteer jika ada jaringan yang secara terbuka mendukung video. Sampai ada layanan yang terbukti, statusnya tetap belum tersedia—bukan pura-pura aktif.</p></div>}
         </section>
 
         <section id="guardrails" className="provider-section">
           <div className="section-head"><div><span className="eyebrow">TRANSPARENCY</span><h3>What is genuinely free?</h3></div></div>
           <div className="panel guardrail-panel">
-            <p><b>AI Horde:</b> komputasi sukarela, tanpa kredit pembelian. Tidak ada jaminan waktu tunggu atau kapasitas tetap; permintaan anonim berada di prioritas paling rendah.</p>
-            <p><b>LoreMotion:</b> klaim unlimited LTX-Video untuk akun gratis, dengan iklan per render dan antrean bersama. Bukan API publik untuk dihubungkan otomatis ke NUSA.</p>
-            <p><b>Movoa:</b> free lane MiniMax H3 tanpa batas harian, tetapi klip 480p/4 detik; syaratnya melarang otomasi/bot.</p>
-            <p><b>Yang tidak saya masukkan:</b> Hugging Face ZeroGPU (kuota GPU harian), FramePack lokal (perlu NVIDIA RTX), dan ZSky untuk aset produk sensitif (lisensi unggahnya luas, output gratis dipublikasikan secara default, serta melarang penggunaan otomatis).</p>
+            <p><b>Text-to-image:</b> GenFree dan FreeImgGen mengiklankan akses tanpa kredit tetap. Keduanya tetap punya fair-use/anti-abuse dan bukan SLA tanpa batas.</p>
+            <p><b>Image-to-video:</b> belum ada layanan yang lolos kriteria ketat setelah klaim provider dibandingkan dengan syarat dan kondisi akses.</p>
+            <p><b>Yang tidak dipakai:</b> LoreMotion dan Movoa (akses gratisnya tidak sesuai), Hugging Face ZeroGPU (kuota GPU harian), Loomance/Wan 2.2 lokal (butuh NVIDIA RTX dan RAM lebih besar), serta layanan yang hanya memberi trial/kredit.</p>
             <p className="notice">Provider eksternal dapat mengubah layanan, antrean, syarat, atau kebijakan sewaktu-waktu. Jangan unggah foto pelanggan, dokumen pribadi, atau aset rahasia.</p>
           </div>
         </section>
