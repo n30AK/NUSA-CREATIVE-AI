@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Aperture, ArrowUpRight, Bot, Clapperboard, ExternalLink, FolderOpen, Image, PackageSearch, Settings2, ShieldCheck, Sparkles, Video, WalletCards } from "lucide-react";
+import { Aperture, ArrowUpRight, Bot, Clapperboard, FolderOpen, Image, PackageSearch, Settings2, Sparkles, Video } from "lucide-react";
 
 type Mode = "hemat" | "hybrid" | "premium";
 
@@ -38,29 +38,6 @@ export default function App() {
         <section className="hero">
           <div><span className="eyebrow light">NUSA CREATIVE AI</span><h2>Turn product links<br/>into content that sells.</h2><p>Riset produk, visual promosi, dan video affiliate 9:16 dalam satu alur kerja.</p><button className="primary" onClick={() => document.getElementById("create")?.scrollIntoView({behavior:"smooth"})}>Create content <ArrowUpRight size={16}/></button></div>
           <div className="hero-art"><div className="orb orb-a"/><div className="orb orb-b"/><div className="phone"><div className="phone-top"/><div className="phone-image"><Clapperboard size={35}/></div><div className="phone-line"/><div className="phone-line short"/></div><div className="floating-tag">30–60 SEC VIDEO</div></div>
-        </section>
-
-        <section className="panel meta-panel">
-          <div className="meta-heading"><div><span className="eyebrow">OPTIONAL AI PROVIDER</span><h3>Meta AI · Dual connection design</h3><p>Jalur akun pengguna dan jalur Meta Model API platform dipisahkan. Keduanya belum aktif.</p></div><span className="locked-pill"><ShieldCheck size={13}/> COST LOCKED</span></div>
-          <div className="meta-grid">
-            <article className="meta-lane">
-              <div className="meta-lane-top"><span className="meta-icon"><Bot size={18}/></span><span className="lane-state">NOT CONNECTED</span></div>
-              <h4>1. Akun Meta pengguna</h4>
-              <p>Rancangan koneksi akun pribadi. Saat ini Meta tidak mendokumentasikan OAuth pihak ketiga untuk menautkan sesi konsumen meta.ai ke NUSA. Karena itu NUSA tidak meminta password, kode OTP, atau cookie Meta.</p>
-              <a className="text-link" href="https://www.meta.ai/" target="_blank" rel="noreferrer">Buka Meta AI <ExternalLink size={13}/></a>
-            </article>
-            <article className="meta-lane">
-              <div className="meta-lane-top"><span className="meta-icon"><Aperture size={18}/></span><span className="lane-state">API KEY REQUIRED</span></div>
-              <h4>2. Meta Model API platform</h4>
-              <p>Muse Spark untuk teks/agent, Muse Image untuk generate/edit gambar, dan Muse Voice Transcribe untuk speech-to-text. API key hanya di server; tidak pernah di browser.</p>
-              <a className="text-link" href="https://dev.meta.ai/" target="_blank" rel="noreferrer">Meta Model API dashboard <ExternalLink size={13}/></a>
-            </article>
-          </div>
-          <div className="meta-governance">
-            <div className="governance-title"><WalletCards size={17}/><b>Persetujuan biaya & privasi</b><span>DEFAULT: OFF</span></div>
-            <div className="governance-points"><span>• Tidak ada pemanggilan API berbayar sebelum persetujuan.</span><span>• Estimasi biaya dan batas anggaran wajib tampil sebelum tiap pekerjaan.</span><span>• Persetujuan per pekerjaan, pencatatan pemakaian, dan tombol hentikan biaya.</span><span>• Mode Contributor tidak dipilih otomatis karena konten dapat digunakan untuk pelatihan model.</span></div>
-            <p className="meta-footnote">Status ini adalah rancangan UI. Penyimpanan persetujuan, billing gate, dan pemanggilan Meta belum terhubung ke backend; tidak ada biaya yang diaktifkan dari halaman ini.</p>
-          </div>
         </section>
 
         <div className="section-head"><div><span className="eyebrow">PRODUCTION PIPELINE</span><h3>Start with a product</h3></div><span className="muted">MVP foundation</span></div>
